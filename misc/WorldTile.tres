@@ -1,9 +1,10 @@
-[gd_resource type="TileSet" load_steps=11 format=3 uid="uid://b3sgeof8bvmw"]
+[gd_resource type="TileSet" load_steps=13 format=3 uid="uid://b3sgeof8bvmw"]
 
 [ext_resource type="Texture2D" uid="uid://b1gywe74upjyk" path="res://images/meteor_square.png" id="1_mvsr1"]
 [ext_resource type="Texture2D" uid="uid://du5n650e803wm" path="res://images/star_double.png" id="2_1q76v"]
 [ext_resource type="Texture2D" uid="uid://rh4dw8pscsgp" path="res://images/star_empty.png" id="3_328is"]
 [ext_resource type="Texture2D" uid="uid://8atf3550hsiq" path="res://images/star_single.png" id="4_0a8po"]
+[ext_resource type="Texture2D" uid="uid://f7my3inw6xtx" path="res://images/ship_hero.png" id="4_qf7jw"]
 [ext_resource type="Texture2D" uid="uid://box5r2h81xgnx" path="res://images/ship_invader.png" id="5_c7j2m"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_h477q"]
@@ -18,6 +19,11 @@ texture_region_size = Vector2i(64, 64)
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_0muig"]
 texture = ExtResource("2_1q76v")
+texture_region_size = Vector2i(64, 64)
+0:0/0 = 0
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_fnnup"]
+texture = ExtResource("4_qf7jw")
 texture_region_size = Vector2i(64, 64)
 0:0/0 = 0
 
@@ -38,3 +44,4 @@ sources/5 = SubResource("TileSetAtlasSource_fbwx2")
 sources/2 = SubResource("TileSetAtlasSource_7giu7")
 sources/1 = SubResource("TileSetAtlasSource_h477q")
 sources/6 = SubResource("TileSetAtlasSource_6rq3g")
+sources/4 = SubResource("TileSetAtlasSource_fnnup")
