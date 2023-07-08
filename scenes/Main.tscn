@@ -24,7 +24,7 @@ offset_right = 464.0
 offset_bottom = 712.0
 text = "New game"
 
-[node name="GameClock" type="Timer" parent="."]
+[node name="TimeClock" type="Timer" parent="."]
 
 [connection signal="pressed" from="ButtonStart" to="." method="_on_button_start_pressed"]
-[connection signal="timeout" from="GameClock" to="." method="_on_game_clock_timeout"]
+[connection signal="timeout" from="TimeClock" to="." method="_on_game_clock_timeout"]

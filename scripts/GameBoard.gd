@@ -9,6 +9,8 @@ const FLEET_SIZE = 10
 # [FIXME] maybe use @onready?
 const MAP_LAYER_SHIPS = 1
 const PLAYER_SHIP_TILESET = 6
+# Number of ships that should reach Earth to win
+const SHIPS_TO_WIN = 3
 
 # edit/attack mode
 var is_plan_phase = false
@@ -16,6 +18,7 @@ var is_plan_phase = false
 # format: [(5, 2), (3, 4), ...]
 var battlefield_start = []
 var battlefield_curr = []
+var battlefield_winners = []
 
 
 # Called when the node enters the scene tree for the first time.
@@ -80,8 +83,19 @@ func get_clicked_tile(click_position):
 # Run when planning phase ends and game starts.
 # Used to clear screen.
 func start_game():
+    $FireRange.visible = true
     for ship_coord in battlefield_start:
         $TileMap.set_cell(MAP_LAYER_SHIPS, ship_coord, -1, Vector2i(0, 0))
+
+
+# Run when game ends and planning phase starts.
+func reset_game():
+    $FireRange.visible = false
+    for ship_coord in battlefield_curr:
+        $TileMap.set_cell(MAP_LAYER_SHIPS, ship_coord, -1, Vector2i(0, 0))
+    battlefield_start = []
+    battlefield_curr = []
+    battlefield_winners = []
 
 
 # Run at each turn, so each timer clock.
@@ -92,13 +106,18 @@ func next_turn():
     var new_tile = false
     var next_row_index_to_spawn = 32
 
-    # move active ships one-tile-up
+    # move active ships one-tile-up,
+    # clean and re-draw ship
     for ship_coord in battlefield_curr:
         new_tile = ship_coord + Vector2i(0, -1)
-        battlefield_new.append(new_tile)
-        # clean and re-draw ship
-        $TileMap.set_cell(MAP_LAYER_SHIPS, ship_coord, -1, Vector2i(0, 0))
-        $TileMap.set_cell(MAP_LAYER_SHIPS, new_tile, PLAYER_SHIP_TILESET, Vector2i(0, 0))
+        # discard winners, keep other invaders
+        if new_tile.y < 0:
+            $TileMap.set_cell(MAP_LAYER_SHIPS, ship_coord, -1, Vector2i(0, 0))
+            battlefield_winners.append(new_tile)
+        else:
+            $TileMap.set_cell(MAP_LAYER_SHIPS, ship_coord, -1, Vector2i(0, 0))
+            $TileMap.set_cell(MAP_LAYER_SHIPS, new_tile, PLAYER_SHIP_TILESET, Vector2i(0, 0))
+            battlefield_new.append(new_tile)
 
     # find the next row to spawn (this is embarassing...)
     # min(coord.y for coord in battlefield_start)
@@ -116,6 +135,12 @@ func next_turn():
     # pop spawned ship from original player strategy
     for ship_coord in battlefield_to_clear:
         battlefield_start.erase(ship_coord)
+
+    # check game over
+    if len(battlefield_winners) >= SHIPS_TO_WIN:
+        print("GAME OVER: YOU WIN")
+    elif not battlefield_new and not battlefield_start:
+        print("GAME OVER: YOU LOST ALL SHIPS")
 
     # updated battlefield is the new battlefield 
     battlefield_curr = battlefield_new
