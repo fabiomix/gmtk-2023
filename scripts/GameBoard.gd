@@ -1,10 +1,14 @@
 extends Node2D
 
 # TileMap doesnt have borders, set max size
-var MAX_TILE_X = 7
-var MAX_TILE_Y = 10
+const MAX_TILE_X = 7
+const MAX_TILE_Y = 10
 # Number of ships for the player
-var FLEET_SIZE = 10
+const FLEET_SIZE = 10
+# Aliases for TileMap and TileSet resource ids
+# [FIXME] maybe use @onready?
+const MAP_LAYER_SHIPS = 1
+const PLAYER_SHIP_TILESET = 6
 
 # edit/attack mode
 var is_plan_phase = false
@@ -34,20 +38,22 @@ func _input(event):
             # there is already a ship here, remove it
             print("Removing ship in " + str(selected_tile))
             ships_positions.erase(selected_tile)
+            $TileMap.set_cell(MAP_LAYER_SHIPS, selected_tile, -1, Vector2i(0, 0))
         elif len(ships_positions) < FLEET_SIZE:
             # add new ship
             print("Ship in " + str(selected_tile))
             ships_positions.append(selected_tile)
+            $TileMap.set_cell(MAP_LAYER_SHIPS, selected_tile, PLAYER_SHIP_TILESET, Vector2i(0, 0))
         else:
             print("Max fleet capacity reached")
 
 
 # InputEventMouseButton position is absolute, not relative to map
 # We remove the scene padding and return local Vector2D
-func _normalize_position(global_position):
-    global_position.x = global_position.x - $TileMap.position.x
-    global_position.y = global_position.y - $TileMap.position.y
-    return global_position
+func _normalize_position(pos):
+    pos.x = pos.x - $TileMap.position.x
+    pos.y = pos.y - $TileMap.position.y
+    return pos
 
 
 # Ensure that clicked tile is a valid tile.
