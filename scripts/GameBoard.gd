@@ -65,7 +65,7 @@ func normalize_position(pos):
 
 # Ensure that clicked tile is a valid tile.
 # Exclude out of map cells and Hero cells (first row)
-func get_clicked_tile(click_position):
+func get_clicked_tile(click_position, im_the_hero=false):
     click_position = normalize_position(click_position)
     var selected_tile = $TileMap.local_to_map(click_position)
     # print(str(click_position) + " - " + str(selected_tile))
@@ -75,7 +75,7 @@ func get_clicked_tile(click_position):
         return false  # too far right
     if selected_tile.y >= MAX_TILE_Y:
         return false  # too far bottom
-    if selected_tile.y == 0:
+    if selected_tile.y == 0 and not im_the_hero:
         return false  # first row is for hero
     return selected_tile
 

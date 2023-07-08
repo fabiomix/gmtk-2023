@@ -1,5 +1,8 @@
 extends Node2D
 
+# Size of a single tile, in pixel
+const  TILE_PIXEL_SIZE = 64
+
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
@@ -28,6 +31,20 @@ func reset_game():
     $TimeClock.stop()
 
 
+# Run at each turn, so each timer clock.
+# Used to move the Hero ship.
+func next_turn():
+    var battlefield = $GameBoard.battlefield_curr
+    var defender_tile = $GameBoard.get_clicked_tile($Defender.position, true)
+    var defender_shift = $Defender.choose_best_move(battlefield, defender_tile)
+    if defender_shift == null:
+        pass
+    elif defender_shift == 0:
+        pass
+    else:
+        set_defender_position(defender_shift)
+
+
 # Toggle plan/attack phase, which determines:
 # - whether the user can click on the map 
 # - whether show the Hero and its fire range
@@ -47,6 +64,10 @@ func _on_button_start_pressed():
 # - move Hero ship
 func _on_game_clock_timeout():
     $GameBoard.next_turn()
-    var player_fleet = $GameBoard.battlefield_curr
-    var defender_tile = Vector2i(3, 0)
-    $Defender.evaluating_strategies(player_fleet, defender_tile)
+    next_turn()
+
+
+# Move Hero ship by "shifting" number of tiles.
+# Can be negative to go left. Convert tile in pixels.
+func set_defender_position(shifting : int):
+    $Defender.position.x += (shifting * TILE_PIXEL_SIZE)
