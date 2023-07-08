@@ -12,8 +12,10 @@ const PLAYER_SHIP_TILESET = 6
 
 # edit/attack mode
 var is_plan_phase = false
-# list for player ships coordinates, es: [(5, 2), (3, 4), ...]
-var ships_positions = []
+# list of player ships coordinates, at start and at runtime
+# format: [(5, 2), (3, 4), ...]
+var battlefield_start = []
+var battlefield_curr = []
 
 
 # Called when the node enters the scene tree for the first time.
@@ -26,24 +28,25 @@ func _process(delta):
     pass
 
 
-# Detect user-clicked tile
+# Detect user-clicked tile, used for placing player ships
+# during planning phase.
 func _input(event):
     # https://dev.to/sanijalal/godot-one-mouse-click-two-events-2615
     if event is InputEventMouseButton and event.is_pressed():
-        var selected_tile = check_valid_tile(event.position)
+        var selected_tile = get_clicked_tile(event.position)
         if not is_plan_phase:
             print("Not in plan phase")
         elif not selected_tile:
             print("Invalid tile click")
-        elif selected_tile in ships_positions:
+        elif selected_tile in battlefield_start:
             # there is already a ship here, remove it
             print("Removing ship in " + str(selected_tile))
-            ships_positions.erase(selected_tile)
+            battlefield_start.erase(selected_tile)
             $TileMap.set_cell(MAP_LAYER_SHIPS, selected_tile, -1, Vector2i(0, 0))
-        elif len(ships_positions) < FLEET_SIZE:
+        elif len(battlefield_start) < FLEET_SIZE:
             # add new ship
             print("Ship in " + str(selected_tile))
-            ships_positions.append(selected_tile)
+            battlefield_start.append(selected_tile)
             $TileMap.set_cell(MAP_LAYER_SHIPS, selected_tile, PLAYER_SHIP_TILESET, Vector2i(0, 0))
         else:
             print("Max fleet capacity reached")
@@ -51,7 +54,7 @@ func _input(event):
 
 # InputEventMouseButton position is absolute, not relative to map
 # We remove the scene padding and return local Vector2D
-func _normalize_position(pos):
+func normalize_position(pos):
     pos.x = pos.x - $TileMap.position.x
     pos.y = pos.y - $TileMap.position.y
     return pos
@@ -59,8 +62,8 @@ func _normalize_position(pos):
 
 # Ensure that clicked tile is a valid tile.
 # Exclude out of map cells and Hero cells (first row)
-func check_valid_tile(click_position):
-    click_position = _normalize_position(click_position)
+func get_clicked_tile(click_position):
+    click_position = normalize_position(click_position)
     var selected_tile = $TileMap.local_to_map(click_position)
     # print(str(click_position) + " - " + str(selected_tile))
     if selected_tile.x < 0 or selected_tile.y < 0:
@@ -72,3 +75,47 @@ func check_valid_tile(click_position):
     if selected_tile.y == 0:
         return false  # first row is for hero
     return selected_tile
+
+
+# Run when planning phase ends and game starts.
+# Used to clear screen.
+func start_game():
+    for ship_coord in battlefield_start:
+        $TileMap.set_cell(MAP_LAYER_SHIPS, ship_coord, -1, Vector2i(0, 0))
+
+
+# Run at each turn, so each timer clock.
+# Used to move and spawn player ships.
+func next_turn():
+    var battlefield_new = []
+    var battlefield_to_clear = []
+    var new_tile = false
+    var next_row_index_to_spawn = 32
+
+    # move active ships one-tile-up
+    for ship_coord in battlefield_curr:
+        new_tile = ship_coord + Vector2i(0, -1)
+        battlefield_new.append(new_tile)
+        # clean and re-draw ship
+        $TileMap.set_cell(MAP_LAYER_SHIPS, ship_coord, -1, Vector2i(0, 0))
+        $TileMap.set_cell(MAP_LAYER_SHIPS, new_tile, PLAYER_SHIP_TILESET, Vector2i(0, 0))
+
+    # find the next row to spawn (this is embarassing...)
+    # min(coord.y for coord in battlefield_start)
+    for ship_coord in battlefield_start:
+        next_row_index_to_spawn = min(next_row_index_to_spawn, ship_coord.y)
+
+    # spawn new ships
+    for ship_coord in battlefield_start:
+        if ship_coord.y == next_row_index_to_spawn:
+            new_tile = Vector2i(ship_coord.x, MAX_TILE_Y-1)
+            battlefield_new.append(new_tile)
+            battlefield_to_clear.append(ship_coord)
+            $TileMap.set_cell(MAP_LAYER_SHIPS, new_tile, PLAYER_SHIP_TILESET, Vector2i(0, 0))
+
+    # pop spawned ship from original player strategy
+    for ship_coord in battlefield_to_clear:
+        battlefield_start.erase(ship_coord)
+
+    # updated battlefield is the new battlefield 
+    battlefield_curr = battlefield_new

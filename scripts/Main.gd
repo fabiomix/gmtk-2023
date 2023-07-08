@@ -24,12 +24,14 @@ func _on_button_start_pressed():
     else:
         $HUD/LabelPhase.text = "Attacking..."
         $GameBoard/FireRange.visible = true
+        $GameBoard.start_game()
         $GameClock.start(1)
     print("is_plan_phase " + str(is_plan_phase))
     $GameBoard.is_plan_phase = is_plan_phase
 
 
 func _on_game_clock_timeout():
-    var player_fleet = $GameBoard.ships_positions
+    $GameBoard.next_turn()
+    var player_fleet = $GameBoard.battlefield_curr
     var defender_tile = Vector2i(3, 0)
     $Defender.evaluating_strategies(player_fleet, defender_tile)
