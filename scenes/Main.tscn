@@ -1,9 +1,10 @@
-[gd_scene load_steps=5 format=3 uid="uid://4h8l3qpegw0o"]
+[gd_scene load_steps=6 format=3 uid="uid://4h8l3qpegw0o"]
 
 [ext_resource type="PackedScene" uid="uid://2ospmd2d1wc1" path="res://scenes/GameBoard.tscn" id="1_7sayr"]
 [ext_resource type="Script" path="res://scripts/Main.gd" id="1_navpx"]
 [ext_resource type="PackedScene" uid="uid://b7vtihlb0eo3m" path="res://scenes/Defender.tscn" id="2_stqie"]
 [ext_resource type="PackedScene" uid="uid://dlp5xpdycct5r" path="res://scenes/Hud.tscn" id="2_vjkib"]
+[ext_resource type="Script" path="res://scripts/Defender.gd" id="5_3l08f"]
 
 [node name="Main" type="Node2D"]
 script = ExtResource("1_navpx")
@@ -14,6 +15,7 @@ script = ExtResource("1_navpx")
 
 [node name="Defender" parent="." instance=ExtResource("2_stqie")]
 position = Vector2(240, 48)
+script = ExtResource("5_3l08f")
 
 [node name="ButtonStart" type="Button" parent="."]
 offset_left = 288.0
@@ -22,4 +24,7 @@ offset_right = 464.0
 offset_bottom = 712.0
 text = "New game"
 
+[node name="GameClock" type="Timer" parent="."]
+
 [connection signal="pressed" from="ButtonStart" to="." method="_on_button_start_pressed"]
+[connection signal="timeout" from="GameClock" to="." method="_on_game_clock_timeout"]

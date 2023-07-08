@@ -28,6 +28,7 @@ func _process(delta):
 
 # Detect user-clicked tile
 func _input(event):
+    # https://dev.to/sanijalal/godot-one-mouse-click-two-events-2615
     if event is InputEventMouseButton and event.is_pressed():
         var selected_tile = check_valid_tile(event.position)
         if not is_plan_phase:
