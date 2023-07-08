@@ -14,6 +14,10 @@ func _process(delta):
 # Toggle plan/attack phase, which determines
 # whether the user can click on the map 
 func _on_button_start_pressed():
-    var is_plan_phase = $GameBoard.is_plan_phase
-    $GameBoard.is_plan_phase = not is_plan_phase
+    var is_plan_phase = not $GameBoard.is_plan_phase
+    if is_plan_phase:
+        $HUD/LabelPhase.text = "Planning phase"
+    else:
+        $HUD/LabelPhase.text = "Attacking..."
     print("is_plan_phase " + str(is_plan_phase))
+    $GameBoard.is_plan_phase = is_plan_phase
