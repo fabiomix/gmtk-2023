@@ -1,0 +1,22 @@
+[gd_scene format=3 uid="uid://dlp5xpdycct5r"]
+
+[node name="HUD" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="BackgroundColor" type="ColorRect" parent="."]
+layout_mode = 0
+offset_right = 480.0
+offset_bottom = 720.0
+color = Color(0.0980392, 0.109804, 0.12549, 1)
+
+[node name="FooterColor" type="ColorRect" parent="."]
+layout_mode = 0
+offset_top = 656.0
+offset_right = 480.0
+offset_bottom = 720.0
+color = Color(0.164706, 0.176471, 0.192157, 1)

@@ -1,11 +1,14 @@
-[gd_scene load_steps=4 format=3 uid="uid://4h8l3qpegw0o"]
+[gd_scene load_steps=5 format=3 uid="uid://4h8l3qpegw0o"]
 
 [ext_resource type="PackedScene" uid="uid://2ospmd2d1wc1" path="res://scenes/GameBoard.tscn" id="1_7sayr"]
 [ext_resource type="Script" path="res://scripts/Main.gd" id="1_navpx"]
 [ext_resource type="PackedScene" uid="uid://b7vtihlb0eo3m" path="res://scenes/Defender.tscn" id="2_stqie"]
+[ext_resource type="PackedScene" uid="uid://dlp5xpdycct5r" path="res://scenes/Hud.tscn" id="2_vjkib"]
 
 [node name="Main" type="Node2D"]
 script = ExtResource("1_navpx")
+
+[node name="HUD" parent="." instance=ExtResource("2_vjkib")]
 
 [node name="GameBoard" parent="." instance=ExtResource("1_7sayr")]
 
