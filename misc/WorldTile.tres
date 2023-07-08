@@ -1,0 +1,88 @@
+[gd_resource type="TileSet" load_steps=9 format=3 uid="uid://b3sgeof8bvmw"]
+
+[ext_resource type="Texture2D" uid="uid://b1gywe74upjyk" path="res://images/meteor_square.png" id="1_mvsr1"]
+[ext_resource type="Texture2D" uid="uid://du5n650e803wm" path="res://images/star_double.png" id="2_1q76v"]
+[ext_resource type="Texture2D" uid="uid://rh4dw8pscsgp" path="res://images/star_empty.png" id="3_328is"]
+[ext_resource type="Texture2D" uid="uid://8atf3550hsiq" path="res://images/star_single.png" id="4_0a8po"]
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_h477q"]
+texture = ExtResource("3_328is")
+0:0/0 = 0
+1:0/0 = 0
+2:0/0 = 0
+3:0/0 = 0
+0:1/0 = 0
+1:1/0 = 0
+2:1/0 = 0
+3:1/0 = 0
+0:2/0 = 0
+1:2/0 = 0
+2:2/0 = 0
+3:2/0 = 0
+0:3/0 = 0
+1:3/0 = 0
+2:3/0 = 0
+3:3/0 = 0
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_7giu7"]
+texture = ExtResource("1_mvsr1")
+0:0/0 = 0
+1:0/0 = 0
+2:0/0 = 0
+3:0/0 = 0
+0:1/0 = 0
+1:1/0 = 0
+2:1/0 = 0
+3:1/0 = 0
+0:2/0 = 0
+1:2/0 = 0
+2:2/0 = 0
+3:2/0 = 0
+0:3/0 = 0
+1:3/0 = 0
+2:3/0 = 0
+3:3/0 = 0
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_0muig"]
+texture = ExtResource("2_1q76v")
+0:0/0 = 0
+1:0/0 = 0
+2:0/0 = 0
+3:0/0 = 0
+0:1/0 = 0
+1:1/0 = 0
+2:1/0 = 0
+3:1/0 = 0
+0:2/0 = 0
+1:2/0 = 0
+2:2/0 = 0
+3:2/0 = 0
+0:3/0 = 0
+1:3/0 = 0
+2:3/0 = 0
+3:3/0 = 0
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_fbwx2"]
+texture = ExtResource("4_0a8po")
+0:0/0 = 0
+1:0/0 = 0
+2:0/0 = 0
+3:0/0 = 0
+0:1/0 = 0
+1:1/0 = 0
+2:1/0 = 0
+3:1/0 = 0
+0:2/0 = 0
+1:2/0 = 0
+2:2/0 = 0
+3:2/0 = 0
+0:3/0 = 0
+1:3/0 = 0
+2:3/0 = 0
+3:3/0 = 0
+
+[resource]
+sources/3 = SubResource("TileSetAtlasSource_0muig")
+sources/5 = SubResource("TileSetAtlasSource_fbwx2")
+sources/2 = SubResource("TileSetAtlasSource_7giu7")
+sources/1 = SubResource("TileSetAtlasSource_h477q")

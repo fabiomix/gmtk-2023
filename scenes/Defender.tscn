@@ -1,0 +1,9 @@
+[gd_scene load_steps=2 format=3 uid="uid://b7vtihlb0eo3m"]
+
+[ext_resource type="Texture2D" uid="uid://dd5yeq4n42cbh" path="res://images/ship_defender.png" id="1_eiliw"]
+
+[node name="Defender" type="Node2D"]
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+rotation = 3.14159
+texture = ExtResource("1_eiliw")

@@ -1,0 +1,18 @@
+[gd_scene load_steps=3 format=3 uid="uid://4h8l3qpegw0o"]
+
+[ext_resource type="PackedScene" uid="uid://2ospmd2d1wc1" path="res://scenes/GameBoard.tscn" id="1_7sayr"]
+[ext_resource type="PackedScene" uid="uid://b7vtihlb0eo3m" path="res://scenes/Defender.tscn" id="2_stqie"]
+
+[node name="Node2D" type="Node2D"]
+
+[node name="GameBoard" parent="." instance=ExtResource("1_7sayr")]
+
+[node name="ButtonStart" type="Button" parent="."]
+offset_left = 288.0
+offset_top = 656.0
+offset_right = 464.0
+offset_bottom = 704.0
+text = "New game"
+
+[node name="Defender" parent="." instance=ExtResource("2_stqie")]
+position = Vector2(240, 48)
