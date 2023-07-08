@@ -12,14 +12,14 @@ script = ExtResource("1_navpx")
 
 [node name="GameBoard" parent="." instance=ExtResource("1_7sayr")]
 
+[node name="Defender" parent="." instance=ExtResource("2_stqie")]
+position = Vector2(240, 48)
+
 [node name="ButtonStart" type="Button" parent="."]
 offset_left = 288.0
 offset_top = 664.0
 offset_right = 464.0
 offset_bottom = 712.0
 text = "New game"
-
-[node name="Defender" parent="." instance=ExtResource("2_stqie")]
-position = Vector2(240, 48)
 
 [connection signal="pressed" from="ButtonStart" to="." method="_on_button_start_pressed"]

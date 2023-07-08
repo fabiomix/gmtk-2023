@@ -23,5 +23,6 @@ layer_1/z_index = 2
 layer_1/tile_data = PackedInt32Array()
 
 [node name="FireRange" type="Node2D" parent="."]
+visible = false
 position = Vector2(240, 0)
 script = ExtResource("3_eohd2")

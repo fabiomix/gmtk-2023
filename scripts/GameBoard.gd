@@ -28,7 +28,7 @@ func _process(delta):
 
 # Detect user-clicked tile
 func _input(event):
-    if Input.is_action_pressed("lmb_click"):
+    if event is InputEventMouseButton and event.is_pressed():
         var selected_tile = check_valid_tile(event.position)
         if not is_plan_phase:
             print("Not in plan phase")
