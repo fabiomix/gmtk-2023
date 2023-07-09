@@ -1,9 +1,10 @@
-[gd_scene load_steps=5 format=3 uid="uid://2ospmd2d1wc1"]
+[gd_scene load_steps=6 format=3 uid="uid://bu3ksqie36gml"]
 
 [ext_resource type="Script" path="res://scripts/GameBoard.gd" id="1_2asu6"]
 [ext_resource type="TileSet" uid="uid://b3sgeof8bvmw" path="res://misc/WorldTile.tres" id="1_einto"]
 [ext_resource type="Script" path="res://scripts/FireRange.gd" id="3_eohd2"]
 [ext_resource type="AudioStream" uid="uid://dofn5h5srddy5" path="res://audio/259710_freesound_alienxxx_radio_beep.wav" id="4_545ft"]
+[ext_resource type="AudioStream" uid="uid://c77xnof4qmt8y" path="res://audio/sfx_laser.ogg" id="5_ba7nt"]
 
 [node name="GameBoard" type="Node2D"]
 script = ExtResource("1_2asu6")
@@ -30,3 +31,6 @@ script = ExtResource("3_eohd2")
 
 [node name="RadioNoise" type="AudioStreamPlayer" parent="."]
 stream = ExtResource("4_545ft")
+
+[node name="LaserSound" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("5_ba7nt")

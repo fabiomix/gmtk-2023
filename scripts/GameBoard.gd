@@ -309,6 +309,7 @@ func hero_fire():
     var vctr = Vector2i(hero_coord.x, 1)
     battlefield_lasers.append(vctr)
     print("Fired in " + str(vctr))
+    $LaserSound.play()
     if not is_tileset_empty(vctr):
         # cell is not empty, invader found! insta-kill
         print("Instant kill in " + str(vctr))
