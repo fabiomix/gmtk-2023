@@ -10,6 +10,7 @@ const FLEET_SIZE = 10
 const MAP_LAYER_SHIPS = 1
 const PLAYER_SHIP_TILESET = 6
 const HERO_SHIP_TILESET = 4
+const LASER_TILESET = 7
 # Number of ships that should reach Earth to win
 const SHIPS_TO_WIN = 3
 # Fire range, as number of tiles
@@ -28,6 +29,8 @@ var battlefield_lasers = []
 var battlefield_dead = []
 # position of the Hero
 var hero_coord = Vector2i(-5, -5)
+# track already spawned rows
+var next_row_index_to_spawn = 0
 
 
 # Called when the node enters the scene tree for the first time.
@@ -47,9 +50,9 @@ func _input(event):
     if event is InputEventMouseButton and event.is_pressed():
         var selected_tile = get_clicked_tile(event.position)
         if not is_plan_phase:
-            print("Not in plan phase")
+            pass  # print("Not in plan phase")
         elif not selected_tile:
-            print("Invalid tile click")
+            pass  # print("Invalid tile click")
         elif selected_tile in battlefield_start:
             # there is already a ship here, remove it
             print("Removing ship in " + str(selected_tile))
@@ -124,7 +127,7 @@ func redraw_battlefield():
             if vctr == hero_coord:
                 update_tileset(vctr, HERO_SHIP_TILESET)
             elif vctr in battlefield_lasers:
-                update_tileset(vctr, HERO_SHIP_TILESET)
+                update_tileset(vctr, LASER_TILESET)
             elif vctr in battlefield_curr:
                 update_tileset(vctr, PLAYER_SHIP_TILESET)
             else:
@@ -135,18 +138,21 @@ func redraw_battlefield():
 func start_game():
     $FireRange.visible = true
     hero_coord = Vector2i(3, 0)  # spawn hero
+    battlefield_winners = []
+    battlefield_dead = []
+    battlefield_lasers = []
     redraw_battlefield()
 
 
 # Run when game ends and planning phase starts.
 func reset_game():
     $FireRange.visible = false
+    hero_coord = Vector2i(-5, -5)
     battlefield_start = []
     battlefield_curr = []
     battlefield_winners = []
     battlefield_dead = []
     battlefield_lasers = []
-    hero_coord = Vector2i(-5, -5)
     redraw_battlefield()
 
 
@@ -155,9 +161,9 @@ func reset_game():
 func next_turn():
     invaders_action()
     laser_action()
+    hero_action()
     invaders_spawn()
     invaders_game_over()
-    hero_action()
     redraw_battlefield()
 
 
@@ -196,8 +202,7 @@ func laser_action():
             battlefield_curr.erase(destination)
             print(str(len(battlefield_dead)) + " killed")
         elif destination.y > FIRE_RANGE_TILE:
-            # laser out of range
-            pass
+            pass  # laser out of range
         else:
             # laser is still valid, keep it for next turn
             battlefield_new.append(destination)
@@ -209,12 +214,6 @@ func invaders_spawn():
     var battlefield_new = battlefield_curr
     var battlefield_to_clear = []
     var destination = false
-    var next_row_index_to_spawn = 32
-
-    # find the next row to spawn (this is embarassing...)
-    # min(coord.y for coord in battlefield_start)
-    for vctr in battlefield_start:
-        next_row_index_to_spawn = min(next_row_index_to_spawn, vctr.y)
 
     # spawn new ships
     for vctr in battlefield_start:
@@ -229,6 +228,7 @@ func invaders_spawn():
 
     # updated battlefield is the new battlefield
     battlefield_curr = battlefield_new
+    next_row_index_to_spawn += 1
 
 
 # check game over conditions
@@ -265,13 +265,14 @@ func hero_choose_best_move():
 
     # check if the Hero see an enemy
     if not closest_target:
-        print("Nothing on radar, sir")
+        #print("Nothing on radar, sir")
         return null
     elif hero_coord.x == closest_target.x:
-        print("Targeting " + str(closest_target) + ", already in position, ready to fire!")
+        #print("Targeting " + str(closest_target) + ", already in position, ready to fire!")
         return 0
     else:
-        print("Targeting " + str(closest_target) + ", I should move from col %s to %s" % [hero_coord.x, closest_target.x])
+        #print("Targeting " + str(closest_target) + ", I should move from col %s to %s" % [hero_coord.x, closest_target.x])
+        pass
     new_vector = min(abs(hero_coord.x - closest_target.x), MAX_HERO_TILE_JUMP)
     return new_vector * -1 if (hero_coord.x > closest_target.x) else new_vector
 

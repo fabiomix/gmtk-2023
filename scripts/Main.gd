@@ -30,7 +30,8 @@ func reset_game():
     $TimeClock.stop()
 
 
-#
+# Run at each turn, so each timer clock.
+# Used to update UI
 func next_turn():
     var values = $GameBoard.proxy_counters()
     $HUD/StatsContainer/DeadLabel.text = str(values['dead'])
