@@ -321,11 +321,6 @@ func hero_action():
         hero_fire()
 
 
-# [DEBUG] print invasion status and game over conditions
-func debug_stats():
-    printt("winners", battlefield_winners, "dead", battlefield_dead)
-
-
 # Collect statistics for the UI
 func proxy_counters():
     return {

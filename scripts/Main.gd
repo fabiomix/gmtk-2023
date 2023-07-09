@@ -3,7 +3,10 @@ extends Node2D
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
-    pass # Replace with function body.
+    $Intro.stop()
+    $ButtonStart.visible = false
+    $HUD/LabelPhase.visible = false
+    $Intro.play("Intro_timeline")
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -27,6 +30,8 @@ func reset_game():
     $HUD/LabelPhase.visible = true
     $HUD/StatsContainer.visible = false
     $ButtonStart.text = "Start"
+    $LabelEndGame.text = ""
+    $LabelEndGame.visible = false
     $GameBoard.reset_game()
     $TimeClock.stop()
 
@@ -37,7 +42,7 @@ func next_turn():
     var values = $GameBoard.proxy_counters()
     $HUD/StatsContainer/DeadLabel.text = str(values['dead'])
     $HUD/StatsContainer/WinnersLabel.text = str(values['winners'])
-    $HUD/StatsContainer/PopulationLabel.text = str(values['population'])
+    $HUD/StatsContainer/PopulationLabel.text = str(values['population'])+'/'+str($GameBoard.FLEET_SIZE)
 
 
 # Toggle plan/attack phase, which determines:
@@ -46,6 +51,9 @@ func next_turn():
 # - change button and label texts
 func _on_button_start_pressed():
     var is_plan_phase = $GameBoard.is_plan_phase
+    var intro_node = get_node_or_null("Intro")
+    if intro_node:
+        intro_node.queue_free()
     if is_plan_phase and len($GameBoard.battlefield_start) == 0:
         return  # no ship on the field
     is_plan_phase = not $GameBoard.is_plan_phase
@@ -63,3 +71,9 @@ func _on_button_start_pressed():
 func _on_game_clock_timeout():
     $GameBoard.next_turn()
     next_turn()
+
+
+# On intro finish
+func _on_intro_animation_finished(anim_name):
+    $ButtonStart.visible = true
+    $HUD/LabelPhase.visible = true
