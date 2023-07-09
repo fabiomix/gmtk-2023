@@ -18,7 +18,7 @@ func start_game():
     $HUD/StatsContainer.visible = true
     $ButtonStart.text = "New game"
     $GameBoard.start_game()
-    $TimeClock.start(2)
+    $TimeClock.start(1)
 
 
 # Run when game ends and planning phase starts.
@@ -27,6 +27,7 @@ func reset_game():
     $HUD/LabelPhase.visible = true
     $HUD/StatsContainer.visible = false
     $ButtonStart.text = "Start"
+    $GameBoard.reset_game()
     $TimeClock.stop()
 
 

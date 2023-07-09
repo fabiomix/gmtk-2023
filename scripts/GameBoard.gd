@@ -116,6 +116,27 @@ func is_tileset_empty(from_pos : Vector2i) -> bool:
     var source_id = $TileMap.get_cell_source_id(MAP_LAYER_SHIPS, from_pos)
     return true if source_id == -1 else false
 
+
+# Check tile for explosions, then clear the collision cell
+func detect_collisions():
+    var explosions = []
+    for vctr in battlefield_lasers:
+        if vctr in battlefield_curr:
+            explosions.append(vctr)
+    for vctr in explosions:
+        if battlefield_lasers.count(vctr) > 1:
+            print("DETECTED DUPLICATE " + str(vctr) + "battlefield_lasers")
+        if battlefield_curr.count(vctr) > 1:
+            print("DETECTED DUPLICATE " + str(vctr) + "battlefield_curr")
+        clear_tileset(vctr)
+        battlefield_lasers.erase(vctr)
+        battlefield_curr.erase(vctr)
+        battlefield_dead.append(vctr)
+        $RadioNoise.play()
+        print("Explosion in " + str(vctr))
+    printt("battlefield", battlefield_curr, "lasers", battlefield_lasers)
+
+
 # Shortcut to repaint the battlefield
 func redraw_battlefield():
     var vctr = false
@@ -160,8 +181,11 @@ func reset_game():
 # Used to move and spawn player ships.
 func next_turn():
     invaders_action()
+    detect_collisions()
     laser_action()
+    detect_collisions()
     hero_action()
+    detect_collisions()
     invaders_spawn()
     invaders_game_over()
     redraw_battlefield()
@@ -175,16 +199,11 @@ func invaders_action():
     for vctr in battlefield_curr:
         destination = vctr + Vector2i(0, -1)
         if destination.y < 0:
-            # discard winners, out of map
+            # out of map, add to winners and dont readd to battlefield
             battlefield_winners.append(destination)
             print(str(len(battlefield_winners)) + " escaped")
-        elif not is_tileset_empty(destination):
-            # check collisions with laser, record kill
-            battlefield_dead.append(vctr)
-            battlefield_lasers.erase(destination)
-            print(str(len(battlefield_dead)) + " killed")
         else:
-            # keep other invaders, move them forward
+            # move forward other invaders
             battlefield_new.append(destination)
     battlefield_curr = battlefield_new
 
@@ -196,20 +215,15 @@ func laser_action():
 
     for vctr in battlefield_lasers:
         destination = vctr + Vector2i(0, 1)
-        if not is_tileset_empty(destination):
-            # collision, remove laser and ship
-            battlefield_dead.append(destination)
-            battlefield_curr.erase(destination)
-            print(str(len(battlefield_dead)) + " killed")
-        elif destination.y > FIRE_RANGE_TILE:
-            pass  # laser out of range
-        else:
-            # laser is still valid, keep it for next turn
-            battlefield_new.append(destination)
+        if destination.y > FIRE_RANGE_TILE:
+            continue  # laser out of range, dont readd
+        # laser is still valid, move forward for next turn
+        battlefield_new.append(destination)
     battlefield_lasers = battlefield_new
 
 
-#
+# Check for new player ships to pop from strategy
+# and spawn into the battlefield
 func invaders_spawn():
     var battlefield_new = battlefield_curr
     var battlefield_to_clear = []
@@ -234,10 +248,9 @@ func invaders_spawn():
 # check game over conditions
 func invaders_game_over():
     if len(battlefield_winners) >= SHIPS_TO_WIN:
-        print("GAME OVER: YOU WIN")
+        pass  # print("GAME OVER: YOU WIN")
     elif not battlefield_curr and not battlefield_start:
-        print("GAME OVER: YOU LOST ALL SHIPS")
-    debug_stats()
+        pass  # print("GAME OVER: YOU LOST ALL SHIPS")
 
 
 # Given the invaders and hero positions, think hero next move:
@@ -265,14 +278,11 @@ func hero_choose_best_move():
 
     # check if the Hero see an enemy
     if not closest_target:
-        #print("Nothing on radar, sir")
-        return null
+        return null  # Nothing on radar, sir
     elif hero_coord.x == closest_target.x:
-        #print("Targeting " + str(closest_target) + ", already in position, ready to fire!")
-        return 0
-    else:
-        #print("Targeting " + str(closest_target) + ", I should move from col %s to %s" % [hero_coord.x, closest_target.x])
-        pass
+        return 0  # already in position, ready to fire
+
+    # hero should move, max 2 tiles
     new_vector = min(abs(hero_coord.x - closest_target.x), MAX_HERO_TILE_JUMP)
     return new_vector * -1 if (hero_coord.x > closest_target.x) else new_vector
 
@@ -282,14 +292,10 @@ func hero_choose_best_move():
 # which clear the tile, remove shot and mark my ship as dead
 func hero_fire():
     var vctr = Vector2i(hero_coord.x, 1)
-    if is_tileset_empty(vctr):
-        # draw laser in empty cell
-        battlefield_lasers.append(vctr)
-        print("Fired in " + str(vctr))
-    else:
-        # cell is not empty, invader found! autokill
-        battlefield_curr.erase(vctr)
-        battlefield_dead.append(vctr)
+    battlefield_lasers.append(vctr)
+    print("Fired in " + str(vctr))
+    if not is_tileset_empty(vctr):
+        # cell is not empty, invader found! insta-kill
         print("Instant kill in " + str(vctr))
 
 
