@@ -162,6 +162,7 @@ func start_game():
     battlefield_winners = []
     battlefield_dead = []
     battlefield_lasers = []
+    next_row_index_to_spawn = 0
     redraw_battlefield()
 
 
