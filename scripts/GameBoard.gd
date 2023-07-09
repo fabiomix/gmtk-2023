@@ -284,10 +284,12 @@ func hero_fire():
     if is_tileset_empty(vctr):
         # draw laser in empty cell
         battlefield_lasers.append(vctr)
+        print("Fired in " + str(vctr))
     else:
         # cell is not empty, invader found! autokill
         battlefield_curr.erase(vctr)
         battlefield_dead.append(vctr)
+        print("Instant kill in " + str(vctr))
 
 
 # Execute the next move of the Hero ship,
@@ -306,3 +308,12 @@ func hero_action():
 # [DEBUG] print invasion status and game over conditions
 func debug_stats():
     printt("winners", battlefield_winners, "dead", battlefield_dead)
+
+
+# Collect statistics for the UI
+func proxy_counters():
+    return {
+        'dead': len(battlefield_dead),
+        'winners': len(battlefield_winners),
+        'population': len(battlefield_curr) + len(battlefield_start)
+    }

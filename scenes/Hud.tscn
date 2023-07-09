@@ -1,4 +1,8 @@
-[gd_scene format=3 uid="uid://dlp5xpdycct5r"]
+[gd_scene load_steps=4 format=3 uid="uid://dlp5xpdycct5r"]
+
+[ext_resource type="Texture2D" uid="uid://cv20fg4dmhyad" path="res://images/icon_dead.png" id="1_y5hmc"]
+[ext_resource type="Texture2D" uid="uid://bvhiiyc5m17r0" path="res://images/icon_escaped.png" id="2_kslbu"]
+[ext_resource type="Texture2D" uid="uid://cer3rmnpty2j0" path="res://images/icon_population.png" id="3_kwx76"]
 
 [node name="HUD" type="Control"]
 layout_mode = 3
@@ -28,4 +32,55 @@ offset_top = 672.0
 offset_right = 240.0
 offset_bottom = 704.0
 text = "Fleet ready for invasion"
+vertical_alignment = 1
+
+[node name="StatsContainer" type="Control" parent="."]
+visible = false
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="DeadIcon" type="Sprite2D" parent="StatsContainer"]
+position = Vector2(32, 687.5)
+scale = Vector2(0.64, 0.62)
+texture = ExtResource("1_y5hmc")
+
+[node name="DeadLabel" type="Label" parent="StatsContainer"]
+layout_mode = 0
+offset_left = 48.0
+offset_top = 672.0
+offset_right = 80.0
+offset_bottom = 703.0
+text = "-"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="WinnersIcon" type="Sprite2D" parent="StatsContainer"]
+position = Vector2(104, 688)
+scale = Vector2(0.64, 0.64)
+texture = ExtResource("2_kslbu")
+
+[node name="WinnersLabel" type="Label" parent="StatsContainer"]
+layout_mode = 0
+offset_left = 120.0
+offset_top = 672.0
+offset_right = 152.0
+offset_bottom = 703.0
+text = "-"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="PopulationIcon" type="Sprite2D" parent="StatsContainer"]
+position = Vector2(176, 688)
+scale = Vector2(0.64, 0.64)
+texture = ExtResource("3_kwx76")
+
+[node name="PopulationLabel" type="Label" parent="StatsContainer"]
+layout_mode = 0
+offset_left = 192.0
+offset_top = 672.0
+offset_right = 224.0
+offset_bottom = 703.0
+text = "-"
+horizontal_alignment = 1
 vertical_alignment = 1

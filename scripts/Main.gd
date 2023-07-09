@@ -14,18 +14,28 @@ func _process(delta):
 # Run when planning phase ends and game starts.
 func start_game():
     $HUD/LabelPhase.text = "Attacking..."
+    $HUD/LabelPhase.visible = false
+    $HUD/StatsContainer.visible = true
     $ButtonStart.text = "New game"
-    #$Defender.visible = true
     $GameBoard.start_game()
-    $TimeClock.start(1)
+    $TimeClock.start(2)
 
 
 # Run when game ends and planning phase starts.
 func reset_game():
     $HUD/LabelPhase.text = "Planning phase"
+    $HUD/LabelPhase.visible = true
+    $HUD/StatsContainer.visible = false
     $ButtonStart.text = "Start"
-    #$Defender.visible = false
     $TimeClock.stop()
+
+
+#
+func next_turn():
+    var values = $GameBoard.proxy_counters()
+    $HUD/StatsContainer/DeadLabel.text = str(values['dead'])
+    $HUD/StatsContainer/WinnersLabel.text = str(values['winners'])
+    $HUD/StatsContainer/PopulationLabel.text = str(values['population'])
 
 
 # Toggle plan/attack phase, which determines:
@@ -47,3 +57,4 @@ func _on_button_start_pressed():
 # - move Hero ship
 func _on_game_clock_timeout():
     $GameBoard.next_turn()
+    next_turn()
