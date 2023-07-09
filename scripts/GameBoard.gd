@@ -10,7 +10,7 @@ const FLEET_SIZE = 7
 const MAP_LAYER_SHIPS = 1
 const PLAYER_SHIP_TILESET = 6
 const HERO_SHIP_TILESET = 4
-const LASER_TILESET = 7
+const LASER_TILESET = 0
 # Number of ships that should reach Earth to win
 const SHIPS_TO_WIN = 3
 # Fire range, as number of tiles
