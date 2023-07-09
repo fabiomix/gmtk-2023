@@ -1,9 +1,15 @@
-[gd_scene load_steps=5 format=3 uid="uid://4h8l3qpegw0o"]
+[gd_scene load_steps=7 format=3 uid="uid://4h8l3qpegw0o"]
 
 [ext_resource type="PackedScene" uid="uid://2ospmd2d1wc1" path="res://scenes/GameBoard.tscn" id="1_7sayr"]
 [ext_resource type="Script" path="res://scripts/Main.gd" id="1_navpx"]
 [ext_resource type="PackedScene" uid="uid://dlp5xpdycct5r" path="res://scenes/Hud.tscn" id="2_vjkib"]
 [ext_resource type="PackedScene" uid="uid://c8nphacr06u5p" path="res://scenes/Intro.tscn" id="4_vxwhu"]
+
+[sub_resource type="SystemFont" id="SystemFont_wss5x"]
+
+[sub_resource type="LabelSettings" id="LabelSettings_tlv6h"]
+font = SubResource("SystemFont_wss5x")
+font_size = 30
 
 [node name="Main" type="Node2D"]
 script = ExtResource("1_navpx")
@@ -23,14 +29,17 @@ text = "New game"
 
 [node name="LabelEndGame" type="Label" parent="."]
 offset_left = 96.0
-offset_top = 576.0
+offset_top = 400.0
 offset_right = 384.0
-offset_bottom = 624.0
+offset_bottom = 448.0
+label_settings = SubResource("LabelSettings_tlv6h")
 horizontal_alignment = 1
 vertical_alignment = 1
 
 [node name="Intro" parent="." instance=ExtResource("4_vxwhu")]
 
+[connection signal="game_over_lose" from="GameBoard" to="." method="_on_game_board_game_over_lose"]
+[connection signal="game_over_win" from="GameBoard" to="." method="_on_game_board_game_over_win"]
 [connection signal="pressed" from="ButtonStart" to="." method="_on_button_start_pressed"]
 [connection signal="timeout" from="TimeClock" to="." method="_on_game_clock_timeout"]
 [connection signal="animation_finished" from="Intro" to="." method="_on_intro_animation_finished"]

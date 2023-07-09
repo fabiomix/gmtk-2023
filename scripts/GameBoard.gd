@@ -35,6 +35,12 @@ var next_row_index_to_spawn = 0
 # used to ensure max one ship per line
 var line_constraint = []
 
+# Events
+signal game_over_win
+signal game_over_lose
+signal enter_planning_phase
+signal start_invasion
+
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
@@ -257,9 +263,9 @@ func invaders_spawn():
 # check game over conditions
 func invaders_game_over():
     if len(battlefield_winners) >= SHIPS_TO_WIN:
-        pass  # print("GAME OVER: YOU WIN")
+        emit_signal("game_over_win")
     elif not battlefield_curr and not battlefield_start:
-        pass  # print("GAME OVER: YOU LOST ALL SHIPS")
+        emit_signal("game_over_lose")
 
 
 # Given the invaders and hero positions, think hero next move:

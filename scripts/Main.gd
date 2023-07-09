@@ -77,3 +77,15 @@ func _on_game_clock_timeout():
 func _on_intro_animation_finished(anim_name):
     $ButtonStart.visible = true
     $HUD/LabelPhase.visible = true
+    $LabelEndGame.text = "Space Invaders"
+
+
+#
+func _on_game_board_game_over_win():
+    $LabelEndGame.text = "You win"
+    $LabelEndGame.visible = true
+
+# 
+func _on_game_board_game_over_lose():
+    $LabelEndGame.text = "Defeat"
+    $LabelEndGame.visible = true
