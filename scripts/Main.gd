@@ -45,7 +45,10 @@ func next_turn():
 # - whether show the Hero and its fire range
 # - change button and label texts
 func _on_button_start_pressed():
-    var is_plan_phase = not $GameBoard.is_plan_phase
+    var is_plan_phase = $GameBoard.is_plan_phase
+    if is_plan_phase and len($GameBoard.battlefield_start) == 0:
+        return  # no ship on the field
+    is_plan_phase = not $GameBoard.is_plan_phase
     if is_plan_phase:
         reset_game()
     else:
