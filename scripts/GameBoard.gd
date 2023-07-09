@@ -4,7 +4,7 @@ extends Node2D
 const MAX_TILE_X = 7
 const MAX_TILE_Y = 10
 # Number of ships for the player
-const FLEET_SIZE = 10
+const FLEET_SIZE = 7
 # Aliases for TileMap and TileSet resource ids
 # [FIXME] maybe use @onready?
 const MAP_LAYER_SHIPS = 1
@@ -31,6 +31,9 @@ var battlefield_dead = []
 var hero_coord = Vector2i(-5, -5)
 # track already spawned rows
 var next_row_index_to_spawn = 0
+# row index that have a starting ship,
+# used to ensure max one ship per line
+var line_constraint = []
 
 
 # Called when the node enters the scene tree for the first time.
@@ -57,11 +60,15 @@ func _input(event):
             # there is already a ship here, remove it
             print("Removing ship in " + str(selected_tile))
             battlefield_start.erase(selected_tile)
+            line_constraint.erase(selected_tile.y)
             clear_tileset(selected_tile)
+        elif selected_tile.y in line_constraint:
+            pass  # One ship already on this row
         elif len(battlefield_start) < FLEET_SIZE:
             # add new ship
             print("Ship in " + str(selected_tile))
             battlefield_start.append(selected_tile)
+            line_constraint.append(selected_tile.y)
             update_tileset(selected_tile, PLAYER_SHIP_TILESET)
         else:
             print("Max fleet capacity reached")
@@ -175,6 +182,7 @@ func reset_game():
     battlefield_winners = []
     battlefield_dead = []
     battlefield_lasers = []
+    line_constraint = []
     redraw_battlefield()
 
 
